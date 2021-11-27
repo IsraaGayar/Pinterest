@@ -16,6 +16,7 @@ class PinList(generics.ListAPIView):
     filterset_fields = ['tags__name', 'title']
 
 
+
 class PinCreate(generics.CreateAPIView):
     queryset = Pin.objects.all()
     serializer_class = PinSerializer

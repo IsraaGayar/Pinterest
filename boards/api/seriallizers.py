@@ -9,6 +9,10 @@ class boardSerializer(serializers.ModelSerializer):
         read_only=True,
         view_name='userdetails'
     )
+    owner = serializers.HyperlinkedRelatedField(
+        read_only=True,
+        view_name='accounts:profile'
+    )
     savedPins= PinListSerializer(many=True,read_only=True)
     class Meta:
         model=Board
