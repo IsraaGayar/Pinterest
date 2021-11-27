@@ -12,7 +12,20 @@ class CustomUserAdmin(UserAdmin):
 
     fieldsets = (
         ('General Info', {'fields': ('username', 'password') }),
-        ('Personal info', {'fields': ('first_name', 'email','follower','savedPins' ,'getPins','getfollowing')}),
+        # ('Personal info', {'fields': ('first_name', 'email','follower','savedPins' ,'getPins','getfollowing')}),
+        ('User info', {'fields': (
+                'first_name',
+                'last_name',
+                'email',
+                'gender',
+                'website',
+                'short_bio',
+                'profile_picture',
+                'follower',
+                'savedPins',
+                'getPins',
+                'getfollowing'
+        )}),
 
         (None, {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions'), }),
         (None, {'fields': ('last_login', 'date_joined')}),

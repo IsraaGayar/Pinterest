@@ -28,11 +28,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields=['id','username','pins','follower_count','following_count']
 
 class AccountSerializer(serializers.ModelSerializer):
-    # password2 = serializers.CharField(write_only=True)
-    url= serializers.HyperlinkedIdentityField(view_name='accounts:profile',read_only=True)
+    password2 = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields=['url',
+        fields=[    'id',
                 'username',
                 'first_name',
                 'last_name',
@@ -41,4 +40,29 @@ class AccountSerializer(serializers.ModelSerializer):
                 'website',
                 'short_bio',
                 'profile_picture',
+                'password',
+                'password2',
                 ]
+        extra_kwargs={
+            'password':{'write_only':True}
+        }
+
+    def save(self, **kwargs):
+        user = User(
+            username=self.validated_data.get('username'),
+            first_name = self.validated_data.get('first_name'),
+            last_name=self.validated_data.get('last_name'),
+            email=self.validated_data.get('email'),
+            gender=self.validated_data.get('gender'),
+            website=self.validated_data.get('website'),
+            short_bio=self.validated_data.get('short_bio'),
+            profile_picture=self.validated_data.get('profile_picture'),
+        )
+        if self.validated_data.get('password') != self.validated_data.get('password2'):
+            raise serializers.ValidationError(
+                {
+                    'password': "Password doesn't match"
+                })
+        else:
+            user.set_password(self.validated_data.get('password'))
+            user.save()
