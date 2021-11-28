@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from comments.models import Comment
-
+from notifications.models import Notification
 
 class NotificationSerializer(serializers.ModelSerializer):
     owner = serializers.HyperlinkedRelatedField(
@@ -16,5 +15,5 @@ class NotificationSerializer(serializers.ModelSerializer):
         view_name='pins:pindetails'
     )
     class Meta:
-        model = Comment
+        model = Notification
         fields='__all__'

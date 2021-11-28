@@ -1,6 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions, status, filters, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
 
 from accounts.models import User
 from accounts.permissions import MyUser
@@ -9,8 +11,10 @@ from accounts.api.seriallizers import AccountSerializer,ProfileSerializer,UserLi
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['username', 'first_name','last_name']
+
 
 class UserProfile(generics.RetrieveAPIView):
     queryset = User.objects.all()
@@ -24,6 +28,7 @@ class AccountDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserFollowers(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['username', 'first_name','last_name']
 
@@ -37,6 +42,7 @@ class UserFollowers(generics.ListAPIView):
 class UserFollowings(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ['username', 'first_name', 'last_name']
 
@@ -83,3 +89,11 @@ class UnFollowuser(viewsets.ModelViewSet):
             return Response(data=str(list(request.user.follower.all())), status=status.HTTP_201_CREATED)
         else:
           return Response(data={'message': 'you already not following that user'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([permissions.IsAuthenticatedOrReadOnly])
+def Logout(request):
+    myuser=request.user
+    Token.objects.get(user=myuser).delete()
+    Token.objects.create(user=myuser)
+    return Response(data={'message': 'you are logged out'}, status=status.HTTP_200_OK)

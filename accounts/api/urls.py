@@ -14,7 +14,7 @@ urlpatterns = [
 
     path('register', views.AccountCreate.as_view(), name='createuser'), #errors !!
     path('login', obtain_auth_token), #checked
-
+    path('logout', views.Logout),  # checked
 
     path('profile/<int:pk>/follow', views.Followuser.as_view({'patch': 'update'}), name='follow'),
     path('profile/<int:pk>/unfollow', views.UnFollowuser.as_view({'patch': 'update'}), name='unfollow'),
