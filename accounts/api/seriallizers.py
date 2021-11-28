@@ -44,19 +44,14 @@ class AccountSerializer(serializers.ModelSerializer):
         extra_kwargs={
             'password':{'write_only':True}
         }
-    #
-    # def create(self, validated_data):
-    #     if self.validated_data.get('password') != self.validated_data.get('password2'):
-    #         raise serializers.ValidationError(
-    #             {
-    #                 'password': "Password doesn't match"
-    #             })
-    #     else:
-    #         self.validated_data.popitem('password2')
-    #         print (self.validated_data)
-    #         user=User.objects.create(self.validated_data)
-    #         user.set_password(self.validated_data.get('password'))
-    #     return user
+
+    def create(self, validated_data):
+        user=User.objects.create(**validated_data)
+        print(user.password)
+        user.set_password(self.validated_data.get('password'))
+        print(user.password)
+        user.save()
+        return user
 
     # def update(self, instance, validated_data):
     #     instance.email = validated_data.get('email', instance.email)

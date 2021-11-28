@@ -1,5 +1,5 @@
-from rest_framework import generics, permissions, status
-from rest_framework.decorators import api_view, permission_classes
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, permissions, status, filters, viewsets
 from rest_framework.response import Response
 
 from accounts.models import User
@@ -9,6 +9,8 @@ from accounts.api.seriallizers import AccountSerializer,ProfileSerializer,UserLi
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['username', 'first_name','last_name']
 
 class UserProfile(generics.RetrieveAPIView):
     queryset = User.objects.all()
@@ -22,6 +24,8 @@ class AccountDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserFollowers(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['username', 'first_name','last_name']
 
     def get_queryset(self):
         try:
@@ -33,6 +37,8 @@ class UserFollowers(generics.ListAPIView):
 class UserFollowings(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    search_fields = ['username', 'first_name', 'last_name']
 
     def get_queryset(self):
         try:
@@ -46,23 +52,34 @@ class AccountCreate(generics.CreateAPIView):
     serializer_class = AccountSerializer
     permission_classes=[]
 
+class Followuser(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
 
+    def update(self, request, *args,**kwargs):
+        try:
+            following=self.get_object() #the person am gonna follow
+        except:
+            return Response(data={'message': 'No such a user '}, status=status.HTTP_400_BAD_REQUEST)
+        if following in request.user.follower.all():
+            return Response(data={'message': 'you already follow that user'},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            request.user.follower.add(following)
+            return Response(data=str(list(request.user.follower.all())),status=status.HTTP_201_CREATED)
 
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def follow(request,*args,**kwargs):
-    try:
-        request.user.follower.add(User.objects.get(pk=kwargs['pk']))
-    except:
-        return Response(data={'message': 'No such user exists'},status=status.HTTP_400_BAD_REQUEST)
-    return Response(status=status.HTTP_200_OK)
+class UnFollowuser(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
 
-@api_view(['POST'])
-@permission_classes([permissions.IsAuthenticated])
-def unfollow(request,*args,**kwargs):
-    try:
-        request.user.follower.remove(User.objects.get(pk=kwargs['pk']))
-    except:
-        return Response(data={'message': 'your user isnt authonticated'},status=status.HTTP_400_BAD_REQUEST)
-    return Response(status=status.HTTP_200_OK)
-
+    def update(self, request, *args,**kwargs):
+        try:
+            following=self.get_object() #the person am gonna follow
+        except:
+            return Response(data={'message': 'No such a user '}, status=status.HTTP_400_BAD_REQUEST)
+        if following in request.user.follower.all():
+            request.user.follower.remove(following)
+            return Response(data=str(list(request.user.follower.all())), status=status.HTTP_201_CREATED)
+        else:
+          return Response(data={'message': 'you already not following that user'}, status=status.HTTP_400_BAD_REQUEST)

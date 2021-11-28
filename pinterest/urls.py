@@ -18,7 +18,7 @@ from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
+import comments.api.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +26,8 @@ urlpatterns = [
     path('pin/', include('pins.api.urls')),
     path('board/', include('boards.api.urls')),
     path('notifications/', include('notifications.api.urls')),
+
+    path('comments', comments.api.views.getcomment.as_view()), #for testing only
 
 ]
 

@@ -11,8 +11,8 @@ urlpatterns = [
 
     path('<int:pk>/comment', CommentCreate.as_view(), name='CommentCreate'),
 
-    path('<int:pk>/save', views.SavePin, name='pinsave'),#checked
-    path('<int:pk>/unsave', views.UnsavePin, name='pinunsave'),#checked
+    path('<int:pk>/save', views.savePin.as_view({'patch': 'update'}), name='pinsave'),#checked
+    path('<int:pk>/unsave', views.unsavePin.as_view({'patch': 'update'}), name='pinunsave'),#checked
 
     path('<int:pk>/like/<str:liketype>', LikePin, name='pinlike'),
     path('<int:pk>/unlike', unLikePin, name='pinunlike'),

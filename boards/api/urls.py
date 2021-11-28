@@ -1,6 +1,4 @@
 from django.urls import path
-
-from comments.api.views import CommentCreate
 from . import views
 
 app_name='boards'
@@ -9,7 +7,10 @@ urlpatterns = [
     path('create', views.Boardview.as_view(), name='boardcreate'),
     path('<int:pk>', views.boardDetail.as_view(), name='boarddetails'),
 
-    path('<int:boardpk>/savepin/<int:pinpk>', views.SavePinInBoard, name='BoardPinSave'),
-    path('<int:boardpk>/unsavepin/<int:pinpk>', views.UnSavePinInBoard, name='BoardPinUnSave'),
+    path('<int:pk>/savepin', views.addPinToBoard.as_view({'patch': 'update'}), name='BoardPinSave2'),
+    path('<int:pk>/unsavepin', views.removePinToBoard.as_view({'patch': 'update'}), name='BoardPinSave2'),
+
+    path('<int:pk>/addcollaborator', views.addcollaboratorToBoard.as_view({'patch': 'update'}), name='BoardCollaSave2'),
+    path('<int:pk>/removecollaborator', views.removecollaboratorToBoard.as_view({'patch': 'update'}), name='BoardCollaSave2'),
 
 ]

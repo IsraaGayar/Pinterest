@@ -1,13 +1,21 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 from comments.api.seriallizers import CommentSerializer
 from comments.models import Comment, Like
 from pins.models import Pin
+
+#for testing only
+class getcomment(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes=[permissions.IsAuthenticatedOrReadOnly]
+    # filter_backends = [filters.OrderingFilter]
+    # ordering = ['-creationDate']
 
 
 class CommentCreate(generics.CreateAPIView):

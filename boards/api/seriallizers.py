@@ -7,7 +7,7 @@ class boardSerializer(serializers.ModelSerializer):
     collaborator = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
-        view_name='userdetails'
+        view_name='accounts:profile'
     )
     owner = serializers.HyperlinkedRelatedField(
         read_only=True,

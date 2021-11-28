@@ -6,7 +6,6 @@ GENDER_CHOICES = [
     ('M', 'Male'),
 ]
 
-
 class User(AbstractUser):
     gender = models.CharField(choices= GENDER_CHOICES, max_length=50, null=True )
     website = models.URLField(max_length=50,null=True,blank=True)
@@ -16,10 +15,12 @@ class User(AbstractUser):
         to='self',
         related_name='following',
         symmetrical=False,
-
         blank=True
     )
-    savedPins = models.ManyToManyField('pins.Pin',related_name='savers',null=True,symmetrical=True,blank=True)
+    savedPins = models.ManyToManyField('pins.Pin',related_name='savers',null=True,blank=True)
+
+    class Meta:
+        ordering = ('username',)
 
     def __str__(self):
         return self.username

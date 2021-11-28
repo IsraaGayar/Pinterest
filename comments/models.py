@@ -10,10 +10,10 @@ class Comment(models.Model):
     content = models.TextField(max_length=500)
     pin = models.ForeignKey('pins.Pin',related_name='comments',on_delete=models.CASCADE)
     owner= models.ForeignKey('accounts.User',related_name='comments',on_delete=models.CASCADE)
-    creationDate = models.DateField(auto_now_add=True)
+    creationDate = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['creationDate']
+        ordering = ('-creationDate',)
 
     def __str__(self):
         return self.content
