@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -138,6 +139,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR, 'static')
 ]
@@ -162,3 +165,4 @@ CORS_ORIGIN_REGEX_WHITELIST = (
     'https?\://myapp\.appspot\.com\/?',
     'https?\://frontend-dot-myapp\.appspot\.com\/?',
 )
+
