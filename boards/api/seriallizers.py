@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from boards.models import Board
-from pins.api.seriallizers import PinListSerializer
+from pins.api.seriallizers import PinListSerializer, Pinintro
 
 
 class boardSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class boardSerializer(serializers.ModelSerializer):
         read_only=True,
         view_name='accounts:profile'
     )
-    savedPins= PinListSerializer(many=True,read_only=True)
+    savedPins= Pinintro(many=True,read_only=True)
     class Meta:
         model=Board
         fields='__all__'

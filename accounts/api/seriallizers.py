@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from accounts.models import User
+from django.contrib.auth import get_user_model
+
+from boards.api.seriallizers import boardSerializer
+from pins.api.seriallizers import Pinintro
+
+User = get_user_model()
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -10,11 +15,20 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    pins = serializers.HyperlinkedRelatedField(
-        many=True,
-        read_only=True,
-        view_name='pins:pindetails'
-    )
+    pins= Pinintro(many=True, read_only=True)
+    # pins = serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='pins:pindetails'
+    # )
+
+    # boards=serializers.HyperlinkedRelatedField(
+    #     many=True,
+    #     read_only=True,
+    #     view_name='pins:boarddetails'
+    # )
+    boards = boardSerializer(many=True)
+
     follower_count = serializers.IntegerField(
         source='follower.count',
         read_only=True
@@ -23,9 +37,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='following.count',
         read_only=True
     )
+
     class Meta:
         model = User
-        fields=['id','username','pins','follower_count','following_count']
+        fields=['id','username','pins','follower_count','following_count','boards']
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,19 +54,47 @@ class AccountSerializer(serializers.ModelSerializer):
                 'website',
                 'short_bio',
                 'profile_picture',
-                'password',
                 ]
-        extra_kwargs={
-            'password':{'write_only':True}
-        }
 
-    def create(self, validated_data):
-        user=User.objects.create(**validated_data)
-        print(user.password)
+
+class RegisterationSerializer(serializers.ModelSerializer):
+    password_confirm = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = [
+            # 'email',
+            'username', 'password', 'password_confirm']
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def save(self, **kwargs):
+        if self.validated_data.get('password') != self.validated_data.get('password_confirm'):
+            raise serializers.ValidationError(
+                {
+                    'password': "Password doesn't match"
+                }
+            )
+
+        user = User(
+            # email=self.validated_data.get('email'),
+            username=self.validated_data.get('username'),
+        )
         user.set_password(self.validated_data.get('password'))
-        print(user.password)
         user.save()
         return user
+
+
+
+
+
+
+    # def create(self, validated_data):
+    #     user=User.objects.create(**validated_data)
+    #     print(user.password)
+    #     user.set_password(self.validated_data.get('password'))
+    #     print(user.password)
+    #     user.save()
+    #     return user
 
     # def update(self, instance, validated_data):
     #     instance.email = validated_data.get('email', instance.email)
