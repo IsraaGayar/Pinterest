@@ -3,7 +3,6 @@ from rest_framework import serializers
 from comments.api.seriallizers import CommentSerializer
 from pins.models import Pin
 
-
 #pinList
 class PinSerializer(serializers.ModelSerializer):
     owner= serializers.HyperlinkedRelatedField(
@@ -27,6 +26,15 @@ class PinSerializer(serializers.ModelSerializer):
                  'comments',
                  'tags',
                  'likes']
+#pinList
+class Pinintro(serializers.ModelSerializer):
+    url= serializers.HyperlinkedIdentityField(view_name='pins:pindetails')
+
+    class Meta:
+        model = Pin
+        fields= ['url',
+                 'pin_picture',
+                 ]
 
 
 class PinListSerializer(serializers.ModelSerializer):
@@ -53,5 +61,6 @@ class PinListSerializer(serializers.ModelSerializer):
         fields= ['url',
                  'title',
                  'owner',
+                 'pin_picture',
                  'ownerName',
                  'profilePic']

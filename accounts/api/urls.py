@@ -1,5 +1,4 @@
 from django.urls import path,include
-from rest_framework.authtoken.views import obtain_auth_token
 
 from . import views
 app_name='accounts'
@@ -13,7 +12,7 @@ urlpatterns = [
     path('profile/<int:pk>/followings', views.UserFollowings.as_view(), name='userfollowings'), #checked
 
     path('register', views.AccountCreate.as_view(), name='createuser'), #errors !!
-    path('login', obtain_auth_token), #checked
+    path('login', views.LoginUser.as_view()), #checked
     path('logout', views.Logout),  # checked
 
     path('profile/<int:pk>/follow', views.Followuser.as_view({'patch': 'update'}), name='follow'),
