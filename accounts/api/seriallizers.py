@@ -40,12 +40,18 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields=['id','username','pins','follower_count','following_count','boards']
+        fields=['id',
+                'username',
+                'pins',
+                'profile_picture',
+                'follower_count',
+                'following_count',
+                'boards']
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields=[    'id',
+        fields=[ 'id',
                 'username',
                 'first_name',
                 'last_name',
@@ -53,6 +59,12 @@ class AccountSerializer(serializers.ModelSerializer):
                 'gender',
                 'website',
                 'short_bio',
+                'profile_picture',
+                ]
+class ProfilePic(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields=[
                 'profile_picture',
                 ]
 
