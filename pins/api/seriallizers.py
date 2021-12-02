@@ -45,6 +45,7 @@ class Pinintro(serializers.ModelSerializer):
         model = Pin
         fields= ['url',
                  'pin_picture',
+                 'id',
                  ]
 
 
@@ -65,6 +66,7 @@ class PinListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pin
         fields= ['url',
+                 'id',
                  'title',
                  'owner',
                  'pin_picture',
