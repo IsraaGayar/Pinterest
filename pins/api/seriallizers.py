@@ -14,6 +14,14 @@ class PinSerializer(serializers.ModelSerializer):
         source='pinlikes.count',
         read_only=True
     )
+    profilePic=serializers.SerializerMethodField(method_name= 'get_profilePic')
+
+    def get_profilePic(self, obj):
+        try:
+            image = obj.owner.kkk
+        except:
+            image = None  # we will put the default pic, or we will store it in the frontend to prevent reloading
+        return image
 
     class Meta:
         model = Pin
@@ -23,9 +31,12 @@ class PinSerializer(serializers.ModelSerializer):
                  'pin_picture',
                  'destination_link',
                  'owner',
+                 'profilePic',
                  'comments',
                  'tags',
                  'likes']
+
+
 #pinList
 class Pinintro(serializers.ModelSerializer):
     url= serializers.HyperlinkedIdentityField(view_name='pins:pindetails')
@@ -34,6 +45,7 @@ class Pinintro(serializers.ModelSerializer):
         model = Pin
         fields= ['url',
                  'pin_picture',
+                 'id',
                  ]
 
 
@@ -49,18 +61,14 @@ class PinListSerializer(serializers.ModelSerializer):
     def get_ownerName(self,obj):
         return obj.owner.username
 
-    def get_profilePic(self,obj):
-        try:
-            image= obj.owner.kkk
-        except:
-            image= None     #we will put the default pic, or we will store it in the frontend to prevent reloading
-        return image
+
 
     class Meta:
         model = Pin
         fields= ['url',
+                 'id',
                  'title',
                  'owner',
                  'pin_picture',
                  'ownerName',
-                 'profilePic']
+                 ]

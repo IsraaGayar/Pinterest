@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=User,weak=False)
 def usercreateHandler(sender,instance,created,**prams):
     if created:
         Token.objects.create(user=instance)
