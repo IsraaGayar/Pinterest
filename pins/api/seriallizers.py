@@ -5,10 +5,7 @@ from pins.models import Pin
 
 #pinList
 class PinSerializer(serializers.ModelSerializer):
-    owner= serializers.HyperlinkedRelatedField(
-                    read_only=True,
-                    view_name='accounts:profile'
-                )
+    owner_username=serializers.CharField(source='owner.username')
     comments= CommentSerializer(many=True,read_only=True)
     likes = serializers.IntegerField(
         source='pinlikes.count',
@@ -32,6 +29,7 @@ class PinSerializer(serializers.ModelSerializer):
                  'pin_picture',
                  'destination_link',
                  'owner',
+                 'owner_username',
                  'profilePic',
                  'comments',
                  'tags',
