@@ -7,6 +7,8 @@ urlpatterns = [
     path('create', views.Boardview.as_view(), name='boardcreate'),
     path('<int:pk>', views.boardDetail.as_view(), name='boarddetails'),
 
+    path('mine', views.Myboards.as_view(), name='myboards'),
+
     path('<int:pk>/savepin', views.addPinToBoard.as_view({'patch': 'update'}), name='BoardPinSave2'),
     path('<int:pk>/unsavepin', views.removePinToBoard.as_view({'patch': 'update'}), name='BoardPinSave2'),
 
