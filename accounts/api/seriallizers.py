@@ -16,19 +16,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     pins= Pinintro(many=True, read_only=True)
-    # pins = serializers.HyperlinkedRelatedField(
-    #     many=True,
-    #     read_only=True,
-    #     view_name='pins:pindetails'
-    # )
-
-    # boards=serializers.HyperlinkedRelatedField(
-    #     many=True,
-    #     read_only=True,
-    #     view_name='pins:boarddetails'
-    # )
     boards = boardSerializer(many=True)
-
     follower_count = serializers.IntegerField(
         source='follower.count',
         read_only=True
@@ -37,7 +25,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='following.count',
         read_only=True
     )
-
     class Meta:
         model = User
         fields=['id',
@@ -48,10 +35,11 @@ class ProfileSerializer(serializers.ModelSerializer):
                 'following_count',
                 'boards']
 
+
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields=[ 'id',
+        fields=['id',
                 'username',
                 'first_name',
                 'last_name',
@@ -65,6 +53,13 @@ class ProfilePic(serializers.ModelSerializer):
     class Meta:
         model = User
         fields=[
+                'profile_picture',
+                ]
+class ownerInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields=['id',
+                'username',
                 'profile_picture',
                 ]
 
