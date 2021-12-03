@@ -41,7 +41,7 @@ class savePin(viewsets.ModelViewSet):
             mypin=self.get_object()
             # data=request.data
         except:
-            return Response(data={'message': 'No such a board '}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={'message': 'No such a pin '}, status=status.HTTP_400_BAD_REQUEST)
         if mypin in request.user.savedPins.all():
             return Response(data={'message': 'pin already saved'},status=status.HTTP_400_BAD_REQUEST)
         else:
