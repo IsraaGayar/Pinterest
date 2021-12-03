@@ -3,10 +3,7 @@ from comments.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(
-        read_only=True,
-        view_name='accounts:profile'
-    )
+    owner_username = serializers.CharField(source='owner.username')
     profilePic = serializers.SerializerMethodField(method_name='get_profilePic')
 
     def get_profilePic(self, obj):
@@ -20,5 +17,6 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ['content',
                   'owner',
+                  'owner_username',
                   'creationDate',
                   'profilePic']
