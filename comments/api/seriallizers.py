@@ -3,7 +3,7 @@ from comments.models import Comment
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    owner_username = serializers.CharField(source='owner.username')
+    owner_username = serializers.CharField(source='owner.username', read_only=True)
     profilePic = serializers.SerializerMethodField(method_name='get_profilePic')
 
     def get_profilePic(self, obj):
@@ -20,3 +20,4 @@ class CommentSerializer(serializers.ModelSerializer):
                   'owner_username',
                   'creationDate',
                   'profilePic']
+        extra_kwargs = {'owner': {'read_only': True}}
