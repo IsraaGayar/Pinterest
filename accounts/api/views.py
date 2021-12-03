@@ -13,6 +13,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+def get_profilePic(user):
+    try:
+        # image = user.profile_picture.url
+        image = user.profile_picture.url
+
+    except:
+        image = None  # we will put the default pic, or we will store it in the frontend to prevent reloading
+    return image
+
 class AccountCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterationSerializer
@@ -25,7 +34,8 @@ class LoginUser(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        picture = ProfilePic(instance=user)
+
+        picture = get_profilePic(user)
 
         print(picture)
         return Response({
@@ -33,7 +43,7 @@ class LoginUser(ObtainAuthToken):
                 'user_id': user.pk,
                 'email': user.email,
                 'username': user.username,
-                'profile_picture': picture.data['profile_picture'],
+                'profile_picture': picture,
             })
 
 class UserList(generics.ListAPIView):

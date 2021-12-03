@@ -3,7 +3,7 @@ from rest_framework import response, generics, permissions, status, viewsets
 from rest_framework.response import Response
 
 from accounts.models import User
-from boards.api.seriallizers import boardSerializer
+from boards.api.seriallizers import boardSerializer, MyboardSerializer
 from boards.models import Board
 from boards.permissions import IsColaboratorOrReadOnly
 from pins.models import Pin
@@ -16,6 +16,13 @@ class Boardview(generics.ListCreateAPIView):
 
     def perform_create(self,serializer):
         serializer.save(owner=self.request.user)
+
+class Myboards(generics.ListAPIView):
+    # queryset = Board.objects.all()
+    serializer_class = MyboardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    def get_queryset(self):
+        return Board.objects.filter(owner=self.request.user)
 
 class boardDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()

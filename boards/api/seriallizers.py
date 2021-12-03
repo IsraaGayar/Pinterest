@@ -17,3 +17,10 @@ class boardSerializer(serializers.ModelSerializer):
     class Meta:
         model=Board
         fields='__all__'
+
+class MyboardSerializer(serializers.ModelSerializer):
+
+    savedPins= Pinintro(many=True,read_only=True)
+    class Meta:
+        model=Board
+        fields=['id', 'name', 'savedPins']
