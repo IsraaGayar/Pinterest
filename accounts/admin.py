@@ -10,7 +10,7 @@ User = get_user_model()
 
 class CustomUserAdmin(UserAdmin):
     readonly_fields = ['getPins','getfollowing']
-    list_display = ('username', 'first_name', 'last_name','getPins')
+    list_display = ('username', 'first_name', 'id' ,'last_name','getPins')
 
     fieldsets = (
         ('General Info', {'fields': ('username', 'password') }),
