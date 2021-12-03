@@ -18,8 +18,8 @@ class PinSerializer(serializers.ModelSerializer):
 
     def get_profilePic(self, obj):
         try:
-            image = obj.owner.kkk
-        except:
+            image = obj.owner.profile_picture.url
+        except ValueError:
             image = None  # we will put the default pic, or we will store it in the frontend to prevent reloading
         return image
 
@@ -56,11 +56,9 @@ class PinListSerializer(serializers.ModelSerializer):
                 )
     url= serializers.HyperlinkedIdentityField(view_name='pins:pindetails')
     ownerName=serializers.SerializerMethodField(method_name= 'get_ownerName')
-    profilePic=serializers.SerializerMethodField(method_name= 'get_profilePic')
 
     def get_ownerName(self,obj):
         return obj.owner.username
-
 
 
     class Meta:

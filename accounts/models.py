@@ -7,7 +7,7 @@ GENDER_CHOICES = [
 ]
 
 class User(AbstractUser):
-    gender = models.CharField(choices= GENDER_CHOICES, max_length=50, null=True )
+    gender = models.CharField(choices= GENDER_CHOICES, max_length=50, null=True,blank=True )
     website = models.URLField(max_length=50,null=True,blank=True)
     short_bio = models.TextField(max_length=250,null=True,blank=True)
     profile_picture = models.ImageField(upload_to='photos',null=True,blank=True)
