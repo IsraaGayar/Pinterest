@@ -76,6 +76,7 @@ class PinSerializer(serializers.ModelSerializer):
 class Pinintro(serializers.ModelSerializer):
     url= serializers.HyperlinkedIdentityField(view_name='pins:pindetails')
     pin_saved=serializers.SerializerMethodField(method_name='is_saved')
+
     def is_saved(self,obj):
         return is_pin_saved(self, obj)
 
@@ -85,6 +86,7 @@ class Pinintro(serializers.ModelSerializer):
                  'pin_picture',
                  'id',
                  'pin_saved',
+                 'title',
                  ]
 
 
