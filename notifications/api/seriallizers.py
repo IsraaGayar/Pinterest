@@ -10,7 +10,7 @@ class NotificationSerializer(serializers.ModelSerializer):
 
     def get_profilePic(self, obj):
         try:
-            image = obj.owner.profile_picture.url
+            image = obj.notifier.profile_picture.url
         except ValueError:
             image = None  # we will put the default pic, or we will store it in the frontend to prevent reloading
         return image
