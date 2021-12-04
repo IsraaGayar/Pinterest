@@ -7,11 +7,29 @@ from pins.api.seriallizers import Pinintro
 User = get_user_model()
 
 
+def is_user_followed(self, obj):
+    try:
+        request = self.context.get("request")
+        user = request.user
+        if obj in user.follower.all():
+            case = True
+        else:
+            case = False
+    except:
+        case = False
+    return case
+
+
 class UserListSerializer(serializers.ModelSerializer):
     url= serializers.HyperlinkedIdentityField(view_name='accounts:profile')
+    is_follow = serializers.SerializerMethodField(method_name='is_followed')
+
+    def is_followed(self, obj):
+        return is_user_followed(self, obj)
+
     class Meta:
         model = User
-        fields = ['url', 'username', 'profile_picture']
+        fields = ['url', 'username', 'profile_picture','is_follow']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -25,6 +43,11 @@ class ProfileSerializer(serializers.ModelSerializer):
         source='following.count',
         read_only=True
     )
+    is_follow = serializers.SerializerMethodField(method_name='is_followed')
+
+    def is_followed(self, obj):
+        return is_user_followed(self, obj)
+
     class Meta:
         model = User
         fields=['id',
@@ -33,7 +56,8 @@ class ProfileSerializer(serializers.ModelSerializer):
                 'profile_picture',
                 'follower_count',
                 'following_count',
-                'boards']
+                'boards',
+                'is_follow']
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -56,11 +80,16 @@ class ProfilePic(serializers.ModelSerializer):
                 'profile_picture',
                 ]
 class ownerInfoSerializer(serializers.ModelSerializer):
+    is_follow = serializers.SerializerMethodField(method_name='is_followed')
+
+    def is_followed(self, obj):
+        return is_user_followed(self, obj)
     class Meta:
         model = User
         fields=['id',
                 'username',
                 'profile_picture',
+                'is_follow'
                 ]
 
 
