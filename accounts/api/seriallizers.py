@@ -36,11 +36,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     pins= Pinintro(many=True, read_only=True)
     boards = boardSerializer(many=True)
     follower_count = serializers.IntegerField(
-        source='follower.count',
+        source='following.count',
         read_only=True
     )
     following_count=serializers.IntegerField(
-        source='following.count',
+        source='follower.count',
         read_only=True
     )
     is_follow = serializers.SerializerMethodField(method_name='is_followed')
