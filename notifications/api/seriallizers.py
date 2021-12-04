@@ -2,18 +2,15 @@ from rest_framework import serializers
 from notifications.models import Notification
 
 class NotificationSerializer(serializers.ModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(
-        read_only=True,
-        view_name='accounts:profile'
-    )
-    notifier = serializers.HyperlinkedRelatedField(
-        read_only=True,
-        view_name='accounts:profile'
-    )
-    pin = serializers.HyperlinkedRelatedField(
-        read_only=True,
-        view_name='pins:pindetails'
-    )
+
+    notifier_username = serializers.CharField(source='notifier.username',read_only=True)
+
     class Meta:
         model = Notification
-        fields='__all__'
+        fields=[
+            'notifier',
+            'notifier_username',
+            'type',
+            'pin',
+            'content',
+        ]
