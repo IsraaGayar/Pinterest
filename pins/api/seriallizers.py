@@ -15,6 +15,17 @@ def is_pin_saved(self, obj):
     except:
         case = False
     return case
+def is_user_followed(self, obj):
+    try:
+        request = self.context.get("request")
+        user = request.user
+        if obj.owner in user.follower.all():
+            case = True
+        else:
+            case = False
+    except:
+        case = False
+    return case
 
 
 #pinList
@@ -27,6 +38,10 @@ class PinSerializer(serializers.ModelSerializer):
     )
     profilePic=serializers.SerializerMethodField(method_name= 'get_profilePic')
     pin_saved=serializers.SerializerMethodField(method_name='is_saved')
+    is_follow = serializers.SerializerMethodField(method_name='is_followed')
+
+    def is_followed(self, obj):
+        return is_user_followed(self, obj)
 
     def is_saved(self, obj):
         return is_pin_saved(self, obj)
@@ -48,6 +63,7 @@ class PinSerializer(serializers.ModelSerializer):
                  'destination_link',
                  'pin_saved',
                  'owner',
+                 'is_follow',
                  'owner_username',
                  'profilePic',
                  'comments',
