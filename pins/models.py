@@ -5,7 +5,7 @@ from django.db import models
 # Create your models here.
 class Pin(models.Model):
     title= models.CharField(max_length=50)
-    description= models.TextField(null=True, default='')
+    description= models.TextField(null=True, default='',blank=True)
     alt_description= models.CharField(max_length=250, null=True, default='')
     pin_picture = models.ImageField(upload_to='photos', null=True, blank=True)
     destination_link = models.URLField(max_length=200, null=True, blank=True)
