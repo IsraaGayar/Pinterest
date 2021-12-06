@@ -34,6 +34,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     pins= Pinintro(many=True, read_only=True)
+    savedPins=Pinintro(many=True, read_only=True)
     boards = boardSerializer(many=True)
     follower_count = serializers.IntegerField(
         source='following.count',
