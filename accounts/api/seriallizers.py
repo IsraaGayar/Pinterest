@@ -57,6 +57,7 @@ class ProfileSerializer(serializers.ModelSerializer):
                 'follower_count',
                 'following_count',
                 'boards',
+                'savedPins',
                 'is_follow']
 
 

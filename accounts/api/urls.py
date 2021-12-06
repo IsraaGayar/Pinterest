@@ -11,7 +11,7 @@ urlpatterns = [
     path('profile/<int:pk>/followers', views.UserFollowers.as_view(), name='userfollowers'), #checked
     path('profile/<int:pk>/followings', views.UserFollowings.as_view(), name='userfollowings'), #checked
 
-    path('register', views.AccountCreate.as_view(), name='createuser'), #errors !!
+    path('register', views.AccountCreate.as_view(), name='createuser'), #checked
     path('login', views.LoginUser.as_view()), #checked
     path('logout', views.Logout),  # checked
 
